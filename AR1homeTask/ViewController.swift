@@ -28,6 +28,69 @@ class ViewController: UIViewController, ARSCNViewDelegate {
         
         // Set the scene to the view
         sceneView.scene = scene
+        
+        // выполнение домашнего задания - создание двора
+        
+        sceneView.autoenablesDefaultLighting = true
+        
+        // добавляем первый узел в корневой узел сцены
+        let node = SCNNode()
+        sceneView.scene.rootNode.addChildNode(node)
+        
+        
+        // добавление геометрических фигур
+        
+        // создание геометрической фигуры - дома
+        let box = SCNBox(width: 0.6, height: 0.3, length: 0.3, chamferRadius: 0)
+        box.firstMaterial?.diffuse.contents = UIColor.brown
+        // узел - дом
+        let houseNode = SCNNode()
+        houseNode.position = SCNVector3(0, -0.3, -1)
+        houseNode.geometry = box
+        node.addChildNode(houseNode)
+        
+        // площадка
+        let yard = SCNFloor()
+        yard.width = 0.3
+        yard.length = 0.18
+        yard.firstMaterial?.diffuse.contents = UIColor.green
+        let yardNode = SCNNode()
+     
+        yardNode.position = SCNVector3(0, -0.45, -0.65)
+        yardNode.geometry = yard
+        node.addChildNode(yardNode)
+        
+        // деревья
+        // координаты для стволов
+        let myTrunkMap : [ SCNVector3 ] = [
+                SCNVector3(-0.15, -0.4, -0.6),
+                SCNVector3(0, -0.4, -0.7),
+                SCNVector3(0.2, -0.4, -0.5)
+        ]
+    
+        for i in 0..<myTrunkMap.count {
+            // стволы деревьев
+            let trunk = SCNCylinder()
+            trunk.height = 0.07
+            trunk.radius = 0.005
+            trunk.firstMaterial?.diffuse.contents = UIColor.darkGray
+            
+            let trunkNode = SCNNode()
+            trunkNode.position = myTrunkMap[ i ]
+            trunkNode.geometry = trunk
+            node.addChildNode(trunkNode)
+            
+            // кроны деревьев
+            let sphere = SCNSphere()
+            sphere.radius =  0.03 * CGFloat(i+1)
+            sphere.firstMaterial?.diffuse.contents = UIColor.blue
+            
+            let sphereNode = SCNNode()
+            sphereNode.position = SCNVector3( myTrunkMap[i].x, myTrunkMap[i].y + 0.03*Float(i+1), myTrunkMap[i].z)
+            sphereNode.geometry = sphere
+            node.addChildNode(sphereNode)
+            
+        }
     }
     
     override func viewWillAppear(_ animated: Bool) {
